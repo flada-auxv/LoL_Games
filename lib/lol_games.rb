@@ -1,11 +1,12 @@
 require "lol_games/version"
 require "lol_games/core_ext/module"
-using CoreExt
+using LolGames::CoreExt
 
 require 'yaml'
 require 'hashie'
 require 'readline'
 
+# TODO quitで終了した時になんか表示されとるぞ！
 module LolGames
 
   # Gameスコープ配下のClass名一覧を返す
@@ -126,6 +127,5 @@ module LolGames
       end
   
     end
-    class Dummy;  end
   end
 end

@@ -3,7 +3,7 @@
 require 'lol_games'
 require 'readline'
 
-
+# TODO GAMEの選択
 game_list = LolGames.game_list
 
 
