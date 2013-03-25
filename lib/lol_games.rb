@@ -1,13 +1,12 @@
 require "lol_games/version"
 require "lol_games/core_ext/module"
+using CoreExt
 
 require 'yaml'
 require 'hashie'
 require 'readline'
 
 module LolGames
-  binding.pry
-  using CoreExt
 
   # Gameスコープ配下のClass名一覧を返す
   def self.game_list
