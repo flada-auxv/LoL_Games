@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'lol_games'
+require 'readline'
+
+
+game_list = LolGames.game_list
+
+
+Readline.readline(">> ", true)
+
+LolGames::Game::WizardWorld.new

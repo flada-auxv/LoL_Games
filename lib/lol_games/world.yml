@@ -1,0 +1,34 @@
+node:
+  living_room:
+    desc: "you are in the living-room. a wizard is snoring loudly on the couch."
+    edges:
+      - to:        :garden
+        direction: :west
+        via:       :door
+      - to:        :attic
+        direction: :upstairs
+        via:       :door
+  garden:
+    desc: "you are ina beautiful garden. there is a well in front of you."
+    edges:
+      - to:        :living_room
+        direction: :east
+        via:       :door
+  attic:
+    desc: "you are in the attic. there is a giant welding torch in the corner."
+    edges:
+      - to:        :living_room
+        direction: :downstairs
+        via:       :ladder
+
+objects:
+  living_room: ["whiskey", "bucket"]
+  garden:      ["frog", "chain"]
+  body:        []
+
+commands:
+  look:      []
+  walk:      ["direction"]
+  pickup:    ["object"]
+  inventory: []
+  quit:      []
