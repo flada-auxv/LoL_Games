@@ -1,39 +1,67 @@
 require "lol_games/version"
 require "lol_games/core_ext/module"
+require 'yaml'
+require 'readline'
+require 'hashie'
 using LolGames::CoreExt
 
-require 'yaml'
-require 'hashie'
-require 'readline'
-
-# TODO quitで終了した時になんか表示されとるぞ！
 module LolGames
 
-  # Gameスコープ配下のClass名一覧を返す
-  def self.game_list
-    Game.module_eval do 
-      constants.map { |c|
-        const_get(c)
-      }.find_all { |c|
-        c.class == Class
-      }
-    end
-  end
+  class << self
 
-  def self.chose_game
-    puts "enter the number from the list below:"
-    games = {}
-    game_list.map(&:to_s).each_with_index do |klass, idx|
-      games[idx.next.to_s] = klass.name
+    # Gameスコープ配下のClass名の配列を返す
+    def game_class_list
+      @game_class_list ||= Game.module_eval do
+        constants.map { |c|
+          const_get(c)
+        }.find_all { |c|
+          c.class == Class
+        }
+      end
     end
 
-    input = Readline.readline(">> ", true)
-    if games.keys.include?(input)
-      games[input]
-    else
-      puts "bye!"
-      exit
+    def summary
+      game_class_list.map.with_index { |game, idx|
+        "[#{idx + 1}] #{game.class_name}"
+      }.join("\n")
     end
+
+    # C-cを受けた時には保存しておいたsttyの出力を元にして端末へ復帰するようにした
+    def readline(prompt, add_hist)
+      stty_save = `stty -g`.chomp
+      begin
+        Readline.readline(prompt, add_hist)
+      rescue Interrupt
+        system("stty", stty_save)
+        exit
+      end
+    end
+
+    def choose_game(input)
+      # 数値化できなければ0になるのでnilが帰る
+      if (1..game_class_list.size) === input.to_i
+        game_class_list[input.to_i - 1]
+      end
+    end
+
+    def run
+      puts "Choose game!"
+      puts "Enter the number from the list below:"
+      puts summary
+
+      game = nil
+      loop do
+        break if game = choose_game(readline(">> ", true))
+        puts "Wlong number"
+        puts ""
+        puts summary
+      end
+
+      puts ""
+      puts "***** Start #{game.class_name}!! ******"
+      game.new
+    end
+
   end
 
   module Game

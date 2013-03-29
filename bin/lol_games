@@ -1,12 +1,9 @@
 #!/usr/bin/env ruby
 
+# Refinementsの警告を消す
+$VERBOSE = nil
+
 require 'lol_games'
 require 'readline'
 
-# TODO GAMEの選択
-game_list = LolGames.game_list
-
-
-Readline.readline(">> ", true)
-
-LolGames::Game::WizardWorld.new
+LolGames.run
